@@ -13,6 +13,16 @@ import BlogForm from "./Component/BlogForm";
 import useGetCookies from "./Hook/useGetCookies";
 import useEraseCookie from "./Hook/useEraseCookie";
 import axios from "axios";
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import Home from './Component/home';
+import About from './Component/about';
+import SousL1 from './Component/SousL1';
+import SousL2 from './Component/SousL2';
+import Default from './Component/Default';
+import Wildcard from './Component/Wildcard';
+import SearchForm from './Component/SearchForm';
+import NotFound from './Component/NotFound';
+import NeedAuth from './Component/NeedAuth';
 
 export default function App() {
     const [loggedUser, setLoggedUser] = useState<LoginResponseInterface>({
@@ -72,18 +82,53 @@ export default function App() {
         eraseCookie();
     }
 
+    const [user, setUser] = useState();
     return (
-        <div className='container mt-5'>
-            <HideIfLogged loggedUser={loggedUser}>
-                <LoginForm setLocalUser={setLocalUser} needsLogin={needsLogin} setNeedsLogin={setNeedsLogin}/>
-            </HideIfLogged>
+        <BrowserRouter>
+            <nav>
+                <h1>Mes routes</h1>
+                <ul>
+                    <li><Link to='/'>Home</Link></li>
+                    <li><Link to='/searchform'>searchform</Link></li>
+                    <li><Link to='/about'>About</Link></li>
+                    <ul>
+                        <li><Link to='/about/souselement1'>SousElment1</Link></li>
+                        <li><Link to='/about/souselement2'>SousElment2</Link></li>
+                    </ul>
+                </ul>
 
-            <HideIfNotLogged loggedUser={loggedUser}>
-                <button className='btn btn-danger d-block mx-auto mb-3' onClick={handleDisconnect}>Disconnect</button>
-                <BlogForm loggedUser={loggedUser} setNeedsUpdate={setNeedsUpdate}/>
-            </HideIfNotLogged>
+                <hr/>
 
-            <BlogList blogList={blogList}/>
-        </div>
+
+            </nav>
+            <Routes>
+                <Route path='/' element={<Home/>}/>
+                <Route path='*' element={<NotFound/>}/>
+                <Route path=':wildcard' element={<Wildcard/>}/>
+                <Route path='/searchform' element={<SearchForm setUser={setUser}/>}/>
+                <Route path='/about/*' element={
+                    <NeedAuth user={user}>
+                        <About />
+                    </NeedAuth>
+                }/>
+            </Routes>
+            <hr/>
+
+            <Routes>
+                <Route path='/' element={<SearchForm setUser={setUser}/>}/>
+            </Routes>
+            <div className='container mt-5'>
+                <HideIfLogged loggedUser={loggedUser}>
+                    <LoginForm setLocalUser={setLocalUser} needsLogin={needsLogin} setNeedsLogin={setNeedsLogin}/>
+                </HideIfLogged>
+
+                <HideIfNotLogged loggedUser={loggedUser}>
+                    <button className='btn btn-danger d-block mx-auto mb-3' onClick={handleDisconnect}>Disconnect</button>
+                    <BlogForm loggedUser={loggedUser} setNeedsUpdate={setNeedsUpdate}/>
+                </HideIfNotLogged>
+
+                <BlogList blogList={blogList}/>
+            </div>
+        </BrowserRouter>
     )
 }

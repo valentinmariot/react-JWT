@@ -12,9 +12,10 @@ AxiosInstance.interceptors.request.use(async req => {
     console.log('Request intercepted');
     let {hetic_token} = useGetCookies();
     const refreshToken = useRefreshToken();
-
     // @ts-ignore
-    if (!(jose.decodeJwt(hetic_token).exp < Date.now() / 1000)) {
+    const isExpired = jose.decodeJwt(hetic_token).exp < (Date.now() / 1000)
+
+    if (!isExpired) {
         console.log('Token not expired')
         return req
     }
