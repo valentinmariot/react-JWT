@@ -50,7 +50,7 @@ try {
     ]);
     exit;
 
-} catch (Exception $e) {
+} catch (Exception $exception) {
     echo json_encode([
         'status' => 'error',
         'message' => 'Invalid Token'
