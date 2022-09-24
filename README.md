@@ -1,6 +1,6 @@
-# Un petit Blog OnePage React PHP
+# SPA using React and PHP
 
-Backend PHP Docker, donc pour faire tourner tout ça :
+To run Backend (made w/PHP & Docker):
 ````shell
 docker-compose up -d &&
 cd ./frontend &&
@@ -8,6 +8,8 @@ yarn &&
 yarn dev
 ````
 
-Vous pouvez créer vos propres identifiants, mais de base : 
+You can try with : 
 - FrancisHuster : password
-- JohnBob : password
+- JohnBob : password     
+
+Obv, you can add new users. 
